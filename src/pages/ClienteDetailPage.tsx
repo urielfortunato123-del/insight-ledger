@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { StatusBadge } from '@/components/StatusBadge';
-import { db, formatCurrency, formatDate, formatCompetence } from '@/lib/data-store';
+import { db, formatCurrency, formatDate, formatCompetence, formatRegime } from '@/lib/data-store';
 
 export default function ClienteDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -40,7 +40,7 @@ export default function ClienteDetailPage() {
               <h1 className="text-xl font-semibold text-foreground">{client.name}</h1>
               <div className="flex items-center gap-3 mt-0.5">
                 <span className="text-xs font-mono text-muted-foreground">{client.cnpj_cpf}</span>
-                <StatusBadge status="info" label={client.regime} dot={false} />
+                <StatusBadge status="info" label={formatRegime(client.regime)} dot={false} />
               </div>
             </div>
           </div>

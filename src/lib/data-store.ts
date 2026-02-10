@@ -416,3 +416,14 @@ export function formatCompetence(comp: string): string {
   const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
   return `${months[parseInt(month) - 1]}/${year}`;
 }
+
+const REGIME_LABELS: Record<string, string> = {
+  MEI: 'MEI',
+  Simples: 'Simples Nacional',
+  Presumido: 'Lucro Presumido',
+  Real: 'Lucro Real',
+};
+
+export function formatRegime(regime: string): string {
+  return REGIME_LABELS[regime] || regime;
+}
