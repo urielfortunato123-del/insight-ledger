@@ -3,9 +3,10 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Users, FileText, BookOpen, ArrowLeftRight,
   Calculator, ClipboardList, UserCheck, BarChart3, Bot,
-  Shield, Settings, Search, Menu, ChevronLeft, Zap, Moon, Sun, CalendarDays, Lock
+  Shield, Settings, Search, Menu, ChevronLeft, Zap, Moon, Sun, CalendarDays, Lock, LogOut
 } from 'lucide-react';
 import { useTheme } from '@/hooks/use-theme';
+import { useAuth } from '@/hooks/use-auth';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -36,6 +37,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { theme, toggleTheme } = useTheme();
+  const { user, signOut } = useAuth();
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -131,9 +133,18 @@ export function AppLayout({ children }: AppLayoutProps) {
             >
               {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </Button>
-            <span className="text-xs text-muted-foreground font-medium px-2 py-1 rounded bg-muted">
-              DEMO
+            <span className="text-xs text-muted-foreground font-medium px-2 py-1 rounded bg-muted max-w-[120px] truncate" title={user?.email ?? ''}>
+              {user?.email?.split('@')[0] ?? 'USER'}
             </span>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={signOut}
+              className="h-9 w-9"
+              title="Sair"
+            >
+              <LogOut className="w-4 h-4" />
+            </Button>
           </div>
         </header>
 
