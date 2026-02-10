@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Users, FileText, BookOpen, ArrowLeftRight,
   Calculator, ClipboardList, UserCheck, BarChart3, Bot,
-  Shield, Settings, Search, Menu, ChevronLeft, Zap, Moon, Sun, CalendarDays
+  Shield, Settings, Search, Menu, ChevronLeft, Zap, Moon, Sun, CalendarDays, Lock
 } from 'lucide-react';
 import { useTheme } from '@/hooks/use-theme';
 import { Input } from '@/components/ui/input';
@@ -22,6 +22,7 @@ const navItems = [
   { label: 'Depto Pessoal', icon: UserCheck, path: '/dp' },
   { label: 'Relatórios', icon: BarChart3, path: '/relatorios' },
   { label: 'IA Copiloto', icon: Bot, path: '/ia' },
+  { label: 'Fechamento', icon: Lock, path: '/fechamento' },
   { label: 'Auditoria', icon: Shield, path: '/auditoria' },
   { label: 'Configurações', icon: Settings, path: '/config' },
 ];

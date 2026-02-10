@@ -20,6 +20,7 @@ import IAPage from "./pages/IAPage";
 import AuditoriaPage from "./pages/AuditoriaPage";
 import ConfigPage from "./pages/ConfigPage";
 import CalendarioFiscalPage from "./pages/CalendarioFiscalPage";
+import FechamentoMesPage from "./pages/FechamentoMesPage";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => {
             <Route path="/relatorios" element={<RelatoriosPage />} />
             <Route path="/ia" element={<IAPage />} />
             <Route path="/auditoria" element={<AuditoriaPage />} />
+            <Route path="/fechamento" element={<FechamentoMesPage />} />
             <Route path="/config" element={<ConfigPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
