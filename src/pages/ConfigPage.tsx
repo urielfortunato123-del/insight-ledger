@@ -1,17 +1,47 @@
 import { useRef, useState } from 'react';
-import { Settings, Database, FolderOpen, Save, Upload, CheckCircle2, Cloud, Loader2 } from 'lucide-react';
+import { Settings, Database, FolderOpen, Save, Upload, CheckCircle2, Cloud, Loader2, KeyRound } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { PageHeader } from '@/components/PageHeader';
 import { db } from '@/lib/data-store';
 import { toast } from 'sonner';
 import { backupToGoogleDrive, restoreFromGoogleDrive } from '@/lib/google-drive';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function ConfigPage() {
   const accounts = db.chartAccounts.getAll();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [restoreStatus, setRestoreStatus] = useState('');
   const [driveLoading, setDriveLoading] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordLoading, setPasswordLoading] = useState(false);
+
+  const handleChangePassword = async () => {
+    if (newPassword.length < 6) {
+      toast.error('A senha deve ter no mínimo 6 caracteres.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error('As senhas não conferem.');
+      return;
+    }
+    setPasswordLoading(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) throw error;
+      toast.success('Senha alterada com sucesso!');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Erro desconhecido';
+      toast.error(`Erro ao alterar senha: ${msg}`);
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
 
   const handleBackup = () => {
     try {
@@ -197,6 +227,43 @@ export default function ConfigPage() {
                 Restaurar do Drive
               </Button>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Alterar Senha */}
+        <Card className="contab-card">
+          <CardHeader>
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <KeyRound className="w-4 h-4" /> Alterar Senha
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="new-password" className="text-xs">Nova Senha</Label>
+              <Input
+                id="new-password"
+                type="password"
+                placeholder="Mínimo 6 caracteres"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="h-8 text-sm"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="confirm-password" className="text-xs">Confirmar Senha</Label>
+              <Input
+                id="confirm-password"
+                type="password"
+                placeholder="Repita a nova senha"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="h-8 text-sm"
+              />
+            </div>
+            <Button onClick={handleChangePassword} size="sm" disabled={passwordLoading}>
+              {passwordLoading ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <KeyRound className="w-4 h-4 mr-1" />}
+              Alterar Senha
+            </Button>
           </CardContent>
         </Card>
 
