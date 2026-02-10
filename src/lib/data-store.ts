@@ -196,6 +196,12 @@ export const db = {
   taxPeriods: {
     getAll: (): TaxPeriod[] => getStore('taxPeriods'),
     getByClient: (clientId: string): TaxPeriod[] => getStore<TaxPeriod>('taxPeriods').filter(t => t.client_id === clientId),
+    save: (tp: TaxPeriod) => {
+      const all = getStore<TaxPeriod>('taxPeriods');
+      const idx = all.findIndex(t => t.id === tp.id);
+      if (idx >= 0) all[idx] = tp; else all.push(tp);
+      setStore('taxPeriods', all);
+    },
   },
   obligations: {
     getAll: (): Obligation[] => getStore('obligations'),
