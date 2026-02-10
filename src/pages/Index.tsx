@@ -136,7 +136,7 @@ export default function Dashboard() {
               { label: 'Upload Documentos', icon: FileUp, path: '/documentos', color: 'text-primary' },
               { label: 'Novo Lançamento', icon: Plus, path: '/lancamentos', color: 'text-primary' },
               { label: 'Gerar Relatórios', icon: BarChart3, path: '/relatorios', color: 'text-primary' },
-              { label: 'Fechar Mês', icon: Lock, path: '/config', color: 'text-warning' },
+              { label: 'Fechar Mês', icon: Lock, path: '/fechamento', color: 'text-warning' },
             ].map((action) => (
               <Link
                 key={action.path + action.label}
