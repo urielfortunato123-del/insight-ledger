@@ -1,11 +1,16 @@
+import { useState } from 'react';
 import { ArrowLeftRight, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PageHeader } from '@/components/PageHeader';
 import { StatusBadge } from '@/components/StatusBadge';
 import { db, formatCurrency, formatDate } from '@/lib/data-store';
+import { ImportCSVDialog } from '@/components/ImportCSVDialog';
 
 export default function ConciliacaoPage() {
+  const [importOpen, setImportOpen] = useState(false);
+  const [version, setVersion] = useState(0);
+
   const transactions = db.transactions.getAll();
   const matched = transactions.filter(t => t.matched);
   const unmatched = transactions.filter(t => !t.matched);
@@ -16,7 +21,9 @@ export default function ConciliacaoPage() {
         title="Conciliação Bancária"
         description="Importação de extratos e match automático"
         actions={
-          <Button size="sm"><Upload className="w-4 h-4 mr-1" /> Importar CSV</Button>
+          <Button size="sm" onClick={() => setImportOpen(true)}>
+            <Upload className="w-4 h-4 mr-1" /> Importar CSV
+          </Button>
         }
       />
 
@@ -74,6 +81,8 @@ export default function ConciliacaoPage() {
           </table>
         </CardContent>
       </Card>
+
+      <ImportCSVDialog open={importOpen} onOpenChange={setImportOpen} onImported={() => setVersion(v => v + 1)} />
     </div>
   );
 }
