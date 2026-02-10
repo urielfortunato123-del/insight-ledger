@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Users, FileText, BookOpen, ArrowLeftRight,
   Calculator, ClipboardList, UserCheck, BarChart3, Bot,
-  Shield, Settings, Search, Menu, ChevronLeft, Zap, Moon, Sun
+  Shield, Settings, Search, Menu, ChevronLeft, Zap, Moon, Sun, CalendarDays
 } from 'lucide-react';
 import { useTheme } from '@/hooks/use-theme';
 import { Input } from '@/components/ui/input';
@@ -17,6 +17,7 @@ const navItems = [
   { label: 'Lançamentos', icon: BookOpen, path: '/lancamentos' },
   { label: 'Conciliação', icon: ArrowLeftRight, path: '/conciliacao' },
   { label: 'Fiscal', icon: Calculator, path: '/fiscal' },
+  { label: 'Calendário', icon: CalendarDays, path: '/calendario' },
   { label: 'Obrigações', icon: ClipboardList, path: '/obrigacoes' },
   { label: 'Depto Pessoal', icon: UserCheck, path: '/dp' },
   { label: 'Relatórios', icon: BarChart3, path: '/relatorios' },
