@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { PageHeader } from '@/components/PageHeader';
 import { StatusBadge } from '@/components/StatusBadge';
-import { db } from '@/lib/data-store';
+import { db, formatRegime } from '@/lib/data-store';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -128,7 +128,7 @@ export default function ClientesPage() {
                 </div>
                 <StatusBadge
                   status="info"
-                  label={client.regime}
+                  label={formatRegime(client.regime)}
                   dot={false}
                 />
                 <div className="text-right">
