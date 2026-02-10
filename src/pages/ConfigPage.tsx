@@ -1,27 +1,81 @@
-import { Settings, Database, FolderOpen, Save } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { Settings, Database, FolderOpen, Save, Upload, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PageHeader } from '@/components/PageHeader';
 import { db } from '@/lib/data-store';
+import { toast } from 'sonner';
 
 export default function ConfigPage() {
   const accounts = db.chartAccounts.getAll();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [restoreStatus, setRestoreStatus] = useState('');
 
   const handleBackup = () => {
-    const data: Record<string, unknown> = {};
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key?.startsWith('contabia_')) {
-        data[key] = JSON.parse(localStorage.getItem(key) || '[]');
+    try {
+      const data: Record<string, unknown> = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key?.startsWith('contabia_')) {
+          try {
+            data[key] = JSON.parse(localStorage.getItem(key) || '[]');
+          } catch {
+            data[key] = localStorage.getItem(key);
+          }
+        }
       }
+
+      const jsonStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `contabia_backup_${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      toast.success('Backup realizado com sucesso!');
+    } catch (err) {
+      console.error('Backup error:', err);
+      toast.error('Erro ao gerar backup. Verifique o console.');
     }
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `contabia_backup_${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+  };
+
+  const handleRestore = () => {
+    fileInputRef.current?.click();
+  };
+
+  const onFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target?.result as string);
+        let count = 0;
+
+        for (const [key, value] of Object.entries(data)) {
+          if (key.startsWith('contabia_')) {
+            localStorage.setItem(key, JSON.stringify(value));
+            count++;
+          }
+        }
+
+        setRestoreStatus(`${count} coleção(ões) restaurada(s)`);
+        toast.success(`Backup restaurado! ${count} coleção(ões) importada(s). Recarregando...`);
+        setTimeout(() => window.location.reload(), 1500);
+      } catch (err) {
+        console.error('Restore error:', err);
+        toast.error('Arquivo de backup inválido.');
+      }
+    };
+    reader.readAsText(file);
+    // Reset input so the same file can be selected again
+    e.target.value = '';
   };
 
   return (
@@ -33,16 +87,33 @@ export default function ConfigPage() {
         <Card className="contab-card">
           <CardHeader>
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <Database className="w-4 h-4" /> Backup
+              <Database className="w-4 h-4" /> Backup & Restauração
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-4">
             <p className="text-xs text-muted-foreground">
-              Faça backup completo dos dados locais. O arquivo JSON contém todos os clientes, documentos, lançamentos e configurações.
+              Faça backup completo dos dados locais em JSON. Restaure a partir de um arquivo salvo anteriormente.
             </p>
-            <Button onClick={handleBackup} size="sm">
-              <Save className="w-4 h-4 mr-1" /> Backup Agora
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={handleBackup} size="sm">
+                <Save className="w-4 h-4 mr-1" /> Backup Agora
+              </Button>
+              <Button onClick={handleRestore} size="sm" variant="outline">
+                <Upload className="w-4 h-4 mr-1" /> Restaurar
+              </Button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json"
+                className="hidden"
+                onChange={onFileSelected}
+              />
+            </div>
+            {restoreStatus && (
+              <p className="text-xs text-success flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3" /> {restoreStatus}
+              </p>
+            )}
           </CardContent>
         </Card>
 
