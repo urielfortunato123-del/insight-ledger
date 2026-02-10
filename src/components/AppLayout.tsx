@@ -3,8 +3,9 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Users, FileText, BookOpen, ArrowLeftRight,
   Calculator, ClipboardList, UserCheck, BarChart3, Bot,
-  Shield, Settings, Search, Menu, ChevronLeft, Zap
+  Shield, Settings, Search, Menu, ChevronLeft, Zap, Moon, Sun
 } from 'lucide-react';
+import { useTheme } from '@/hooks/use-theme';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -32,6 +33,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -118,6 +120,15 @@ export function AppLayout({ children }: AppLayoutProps) {
           </div>
 
           <div className="flex items-center gap-2 ml-auto">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="h-9 w-9"
+              title={theme === 'light' ? 'Modo escuro' : 'Modo claro'}
+            >
+              {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+            </Button>
             <span className="text-xs text-muted-foreground font-medium px-2 py-1 rounded bg-muted">
               DEMO
             </span>
