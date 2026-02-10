@@ -1,15 +1,17 @@
 import { useRef, useState } from 'react';
-import { Settings, Database, FolderOpen, Save, Upload, CheckCircle2 } from 'lucide-react';
+import { Settings, Database, FolderOpen, Save, Upload, CheckCircle2, Cloud, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PageHeader } from '@/components/PageHeader';
 import { db } from '@/lib/data-store';
 import { toast } from 'sonner';
+import { backupToGoogleDrive, restoreFromGoogleDrive } from '@/lib/google-drive';
 
 export default function ConfigPage() {
   const accounts = db.chartAccounts.getAll();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [restoreStatus, setRestoreStatus] = useState('');
+  const [driveLoading, setDriveLoading] = useState(false);
 
   const handleBackup = () => {
     try {
@@ -41,6 +43,63 @@ export default function ConfigPage() {
     } catch (err) {
       console.error('Backup error:', err);
       toast.error('Erro ao gerar backup. Verifique o console.');
+    }
+  };
+
+  const getBackupData = (): Record<string, unknown> => {
+    const data: Record<string, unknown> = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith('contabia_')) {
+        try {
+          data[key] = JSON.parse(localStorage.getItem(key) || '[]');
+        } catch {
+          data[key] = localStorage.getItem(key);
+        }
+      }
+    }
+    return data;
+  };
+
+  const handleDriveBackup = async () => {
+    setDriveLoading(true);
+    try {
+      const data = getBackupData();
+      const { fileName } = await backupToGoogleDrive(data);
+      toast.success(`Backup enviado para Google Drive: ${fileName}`);
+    } catch (err: unknown) {
+      console.error('Google Drive backup error:', err);
+      const msg = err instanceof Error ? err.message : 'Erro desconhecido';
+      toast.error(`Erro no backup Google Drive: ${msg}`);
+    } finally {
+      setDriveLoading(false);
+    }
+  };
+
+  const handleDriveRestore = async () => {
+    setDriveLoading(true);
+    try {
+      const result = await restoreFromGoogleDrive();
+      if (!result) {
+        toast.info('Nenhum backup encontrado no Google Drive.');
+        return;
+      }
+      let count = 0;
+      for (const [key, value] of Object.entries(result.data)) {
+        if (key.startsWith('contabia_')) {
+          localStorage.setItem(key, JSON.stringify(value));
+          count++;
+        }
+      }
+      setRestoreStatus(`${count} coleção(ões) restaurada(s) do Drive`);
+      toast.success(`Restaurado de ${result.fileName}! Recarregando...`);
+      setTimeout(() => window.location.reload(), 1500);
+    } catch (err: unknown) {
+      console.error('Google Drive restore error:', err);
+      const msg = err instanceof Error ? err.message : 'Erro desconhecido';
+      toast.error(`Erro ao restaurar do Drive: ${msg}`);
+    } finally {
+      setDriveLoading(false);
     }
   };
 
@@ -114,6 +173,30 @@ export default function ConfigPage() {
                 <CheckCircle2 className="w-3 h-3" /> {restoreStatus}
               </p>
             )}
+          </CardContent>
+        </Card>
+
+        {/* Google Drive Backup */}
+        <Card className="contab-card">
+          <CardHeader>
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <Cloud className="w-4 h-4" /> Backup Google Drive
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-xs text-muted-foreground">
+              Envie ou restaure backups diretamente do seu Google Drive. Os arquivos ficam na pasta "ContabIA Backups".
+            </p>
+            <div className="flex gap-2">
+              <Button onClick={handleDriveBackup} size="sm" disabled={driveLoading}>
+                {driveLoading ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Cloud className="w-4 h-4 mr-1" />}
+                Enviar p/ Drive
+              </Button>
+              <Button onClick={handleDriveRestore} size="sm" variant="outline" disabled={driveLoading}>
+                {driveLoading ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Upload className="w-4 h-4 mr-1" />}
+                Restaurar do Drive
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
