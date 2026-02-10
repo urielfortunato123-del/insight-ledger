@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Plus, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { PageHeader } from '@/components/PageHeader';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { db, formatCurrency, formatDate, formatCompetence } from '@/lib/data-store';
+import { NovoLancamentoForm } from '@/components/NovoLancamentoForm';
 
 export default function LancamentosPage() {
   const [competence, setCompetence] = useState('2025-01');
+  const [formOpen, setFormOpen] = useState(false);
+  const [version, setVersion] = useState(0);
   const entries = db.entries.getAll().filter(e => e.competence === competence);
 
   const totalDebit = entries.flatMap(e => e.lines).reduce((s, l) => s + l.debit, 0);
@@ -19,7 +22,7 @@ export default function LancamentosPage() {
         title="Lançamentos Contábeis"
         description="Livro diário e lançamentos por competência"
         actions={
-          <Button size="sm"><Plus className="w-4 h-4 mr-1" /> Novo Lançamento</Button>
+          <Button size="sm" onClick={() => setFormOpen(true)}><Plus className="w-4 h-4 mr-1" /> Novo Lançamento</Button>
         }
       />
 
@@ -77,6 +80,8 @@ export default function LancamentosPage() {
           )}
         </CardContent>
       </Card>
+
+      <NovoLancamentoForm open={formOpen} onOpenChange={setFormOpen} onSaved={() => setVersion(v => v + 1)} />
     </div>
   );
 }
