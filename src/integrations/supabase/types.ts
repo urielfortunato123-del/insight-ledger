@@ -14,6 +14,182 @@ export type Database = {
   }
   public: {
     Tables: {
+      companies: {
+        Row: {
+          cnpj: string | null
+          created_at: string
+          estado: string | null
+          id: string
+          municipio: string | null
+          possui_folha: boolean
+          razao_social: string
+          regime_tributario: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cnpj?: string | null
+          created_at?: string
+          estado?: string | null
+          id?: string
+          municipio?: string | null
+          possui_folha?: boolean
+          razao_social: string
+          regime_tributario: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cnpj?: string | null
+          created_at?: string
+          estado?: string | null
+          id?: string
+          municipio?: string | null
+          possui_folha?: boolean
+          razao_social?: string
+          regime_tributario?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      company_obligations: {
+        Row: {
+          company_id: string
+          competencia: string
+          created_at: string
+          data_envio: string | null
+          enviado_por: string | null
+          id: string
+          notas: string | null
+          obligation_type_id: string
+          prazo: string
+          protocolo: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          competencia: string
+          created_at?: string
+          data_envio?: string | null
+          enviado_por?: string | null
+          id?: string
+          notas?: string | null
+          obligation_type_id: string
+          prazo: string
+          protocolo?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          competencia?: string
+          created_at?: string
+          data_envio?: string | null
+          enviado_por?: string | null
+          id?: string
+          notas?: string | null
+          obligation_type_id?: string
+          prazo?: string
+          protocolo?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_obligations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_obligations_obligation_type_id_fkey"
+            columns: ["obligation_type_id"]
+            isOneToOne: false
+            referencedRelation: "obligation_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      obligation_attachments: {
+        Row: {
+          company_obligation_id: string
+          created_at: string
+          file_type: string | null
+          file_url: string
+          id: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          company_obligation_id: string
+          created_at?: string
+          file_type?: string | null
+          file_url: string
+          id?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          company_obligation_id?: string
+          created_at?: string
+          file_type?: string | null
+          file_url?: string
+          id?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "obligation_attachments_company_obligation_id_fkey"
+            columns: ["company_obligation_id"]
+            isOneToOne: false
+            referencedRelation: "company_obligations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      obligation_types: {
+        Row: {
+          aplicavel_mei: boolean
+          aplicavel_presumido: boolean
+          aplicavel_real: boolean
+          aplicavel_simples: boolean
+          created_at: string
+          dia_vencimento: number | null
+          esfera: string
+          exige_folha: boolean
+          id: string
+          nome: string
+          periodicidade: string
+        }
+        Insert: {
+          aplicavel_mei?: boolean
+          aplicavel_presumido?: boolean
+          aplicavel_real?: boolean
+          aplicavel_simples?: boolean
+          created_at?: string
+          dia_vencimento?: number | null
+          esfera: string
+          exige_folha?: boolean
+          id?: string
+          nome: string
+          periodicidade: string
+        }
+        Update: {
+          aplicavel_mei?: boolean
+          aplicavel_presumido?: boolean
+          aplicavel_real?: boolean
+          aplicavel_simples?: boolean
+          created_at?: string
+          dia_vencimento?: number | null
+          esfera?: string
+          exige_folha?: boolean
+          id?: string
+          nome?: string
+          periodicidade?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           cargo: string | null

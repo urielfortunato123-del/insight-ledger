@@ -16,6 +16,8 @@ import LancamentosPage from "./pages/LancamentosPage";
 import ConciliacaoPage from "./pages/ConciliacaoPage";
 import FiscalPage from "./pages/FiscalPage";
 import ObrigacoesPage from "./pages/ObrigacoesPage";
+import EmpresasPage from "./pages/EmpresasPage";
+import ObrigacoesCOCPage from "./pages/ObrigacoesCOCPage";
 import DPPage from "./pages/DPPage";
 import RelatoriosPage from "./pages/RelatoriosPage";
 import IAPage from "./pages/IAPage";
@@ -53,6 +55,8 @@ function ProtectedRoutes() {
         <Route path="/conciliacao" element={<ConciliacaoPage />} />
         <Route path="/fiscal" element={<FiscalPage />} />
         <Route path="/calendario" element={<CalendarioFiscalPage />} />
+        <Route path="/empresas" element={<EmpresasPage />} />
+        <Route path="/obrigacoes-coc" element={<ObrigacoesCOCPage />} />
         <Route path="/obrigacoes" element={<ObrigacoesPage />} />
         <Route path="/dp" element={<DPPage />} />
         <Route path="/relatorios" element={<RelatoriosPage />} />
