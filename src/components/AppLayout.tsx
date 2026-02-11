@@ -13,13 +13,14 @@ import { cn } from '@/lib/utils';
 
 const navItems = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/' },
+  { label: 'Empresas', icon: Users, path: '/empresas' },
+  { label: 'Obrigações', icon: ClipboardList, path: '/obrigacoes-coc' },
   { label: 'Clientes', icon: Users, path: '/clientes' },
   { label: 'Documentos', icon: FileText, path: '/documentos' },
   { label: 'Lançamentos', icon: BookOpen, path: '/lancamentos' },
   { label: 'Conciliação', icon: ArrowLeftRight, path: '/conciliacao' },
   { label: 'Fiscal', icon: Calculator, path: '/fiscal' },
   { label: 'Calendário', icon: CalendarDays, path: '/calendario' },
-  { label: 'Obrigações', icon: ClipboardList, path: '/obrigacoes' },
   { label: 'Depto Pessoal', icon: UserCheck, path: '/dp' },
   { label: 'Relatórios', icon: BarChart3, path: '/relatorios' },
   { label: 'IA Copiloto', icon: Bot, path: '/ia' },
