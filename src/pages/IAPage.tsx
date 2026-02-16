@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Bot, Send, AlertTriangle, Info, Lightbulb, Loader2 } from 'lucide-react';
+import { Bot, Send, AlertTriangle, Info, Lightbulb, Loader2, Download, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -192,6 +192,69 @@ export default function IAPage() {
               </CardContent>
             </Card>
           ))}
+
+          {/* Programas SPED */}
+          <h2 className="text-sm font-semibold text-foreground flex items-center gap-2 mt-6">
+            <Download className="w-4 h-4 text-brand" /> Programas e Downloads SPED
+          </h2>
+
+          <Card className="contab-card">
+            <CardContent className="p-4 space-y-4">
+              <div>
+                <p className="text-sm font-semibold text-foreground">EFD-Contribuições</p>
+                <p className="text-xs text-muted-foreground mb-2">Usado para declarar PIS/COFINS mensais</p>
+                <a
+                  href="https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/declaracoes-e-demonstrativos/sped-sistema-publico-de-escrituracao-digital/escrituracao-fiscal-digital-efd-contribuicoes/escrituracao-fiscal-digital-efd-contribuicoes-programa"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+                >
+                  <Download className="w-3 h-3" /> Download EFD-Contribuições (Programa PVA)
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+
+              <div className="border-t border-border pt-3">
+                <p className="text-sm font-semibold text-foreground">SPED ECF</p>
+                <p className="text-xs text-muted-foreground mb-2">Usado para enviar a Escrituração Contábil Fiscal (anual), obrigatória no Lucro Presumido</p>
+                <a
+                  href="https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/declaracoes-e-demonstrativos/sped-sistema-publico-de-escrituracao-digital/escrituracao-contabil-fiscal-ecf/sped-programa-sped-contabil-fiscal"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+                >
+                  <Download className="w-3 h-3" /> Download SPED ECF (Validador/Assinador)
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+
+              <div className="border-t border-border pt-3">
+                <p className="text-sm font-semibold text-foreground">SPED ECD</p>
+                <p className="text-xs text-muted-foreground mb-2">Usado para enviar a Escrituração Contábil Digital (anual), também obrigatória</p>
+                <a
+                  href="https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/declaracoes-e-demonstrativos/sped-sistema-publico-de-escrituracao-digital/escrituracao-contabil-digital-ecd/escrituracao-contabil-digital-programa"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+                >
+                  <Download className="w-3 h-3" /> Download SPED ECD (Validador/Assinador)
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+
+              <div className="border-t border-border pt-3">
+                <p className="text-xs text-muted-foreground">Todos os programas do SPED em um só lugar:</p>
+                <a
+                  href="https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/declaracoes-e-demonstrativos/sped-sistema-publico-de-escrituracao-digital"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+                >
+                  <ExternalLink className="w-3 h-3" /> Portal SPED — Receita Federal
+                </a>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Chat */}
