@@ -121,10 +121,12 @@ function ProgramaCard({ programa }: { programa: ProgramaInfo }) {
       </div>
 
       <Collapsible open={isGuideOpen} onOpenChange={setIsGuideOpen}>
-        <CollapsibleTrigger className="flex items-center gap-1.5 text-xs font-medium text-brand hover:text-brand/80 transition-colors cursor-pointer">
-          <BookOpen className="w-3 h-3" />
-          Como usar — Passo a passo
-          <ChevronDown className={cn("w-3 h-3 transition-transform", isGuideOpen && "rotate-180")} />
+        <CollapsibleTrigger asChild>
+          <button className="flex items-center gap-1.5 text-xs font-medium text-brand hover:text-brand/80 transition-colors cursor-pointer py-1">
+            <BookOpen className="w-3 h-3" />
+            Como usar — Passo a passo
+            <ChevronDown className={cn("w-3 h-3 transition-transform", isGuideOpen && "rotate-180")} />
+          </button>
         </CollapsibleTrigger>
         <CollapsibleContent className="mt-3 space-y-3">
           <div className="bg-muted/50 rounded-lg p-3 border border-border">
